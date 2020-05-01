@@ -367,8 +367,6 @@ one more than the minimum. */
 #define DIST_PRECISION_BITS 4
 #define DIST_PRECISION (1 << DIST_PRECISION_BITS) // 16
 
-// bitmask construction.
-// Shall be removed when bitmask code is completely checkedin
 #define LOOP_FILTER_BITMASK 0
 #define PROFILE_BITS 3
 
@@ -871,7 +869,6 @@ typedef enum ATTRIBUTE_PACKED {
     ADST_1D,
     FLIPADST_1D,
     IDTX_1D,
-    // mrc experiment to make this work with the ext-tx pruning functions
     TX_TYPES_1D,
 } TxType1D;
 
@@ -1283,8 +1280,6 @@ typedef enum ATTRIBUTE_PACKED {
 
 // 4 scratch frames for the new frames to support a maximum of 4 cores decoding
 // in parallel, 3 for scaled references on the encoder.
-// of framebuffers.
-// normal reference pool.
 #define FRAME_BUFFERS (REF_FRAMES + 7)
 
 /* Constant values while waiting for the sequence header */
@@ -1310,7 +1305,6 @@ MAX_NUM_TEMPORAL_LAYERS * MAX_NUM_SPATIAL_LAYERS
 static INLINE int32_t is_valid_seq_level_idx(uint8_t seq_level_idx) {
     return seq_level_idx < 24 || seq_level_idx == 31;
 }
-// processing timer.
 #define TXCOEFF_TIMER 0
 #define TXCOEFF_COST_TIMER 0
 

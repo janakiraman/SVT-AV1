@@ -1641,8 +1641,6 @@ static void iadst4_new_sse2(const __m128i *input, __m128i *output, int8_t cos_bi
     }
 }
 
-// To explore the reuse of VP9 versions of corresponding SSE2 functions and
-// evaluate whether there is a possibility for further speedup.
 static void iadst4_w4_new_sse2(const __m128i *input, __m128i *output, int8_t cos_bit) {
     (void)cos_bit;
     const int32_t *sinpi         = sinpi_arr(INV_COS_BIT);

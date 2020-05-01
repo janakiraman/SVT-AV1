@@ -825,7 +825,6 @@ void setup_ref_mv_list(PictureControlSet *pcs_ptr, const Av1Common *cm, const Ma
     //CHKN finish the Tables.
 
     if (rf[1] > NONE_FRAME) {
-        // single reference frame modes. Reduce unnecessary redundancy.
 
         //CHKN we get here only when refMVCount=0 or 1
 
@@ -981,7 +980,6 @@ void setup_ref_mv_list(PictureControlSet *pcs_ptr, const Av1Common *cm, const Ma
                     if (stack_idx == refmv_count[ref_frame]) {
                         ref_mv_stack[ref_frame][stack_idx].this_mv = this_mv;
 
-                        // doesn't matter as long as it is properly initialized.
                         ref_mv_stack[ref_frame][stack_idx].weight = 2;
                         ++refmv_count[ref_frame];
                     }
