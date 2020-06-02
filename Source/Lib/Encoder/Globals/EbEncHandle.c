@@ -218,10 +218,7 @@ void eb_set_thread_management_parameters(EbSvtAv1EncConfiguration *config_ptr)
     uint32_t num_logical_processors = get_num_processors();
     // For system with a single processor group(no more than 64 logic processors all together)
     // Affinity of the thread can be set to one or more logical processors
-    if (config_ptr->logical_processors == 1 && config_ptr->unpin == 1) {
-        group_affinity.Mask = get_affinity_mask(num_logical_processors);
-    }
-    else {
+   {
         if (num_groups == 1) {
             uint32_t lps = config_ptr->logical_processors == 0 ? num_logical_processors :
                 config_ptr->logical_processors < num_logical_processors ? config_ptr->logical_processors : num_logical_processors;
@@ -253,10 +250,7 @@ void eb_set_thread_management_parameters(EbSvtAv1EncConfiguration *config_ptr)
     }
 #elif defined(__linux__)
     uint32_t num_logical_processors = get_num_processors();
-    if (config_ptr->logical_processors == 1 && config_ptr->unpin == 1) {
-        pthread_getaffinity_np(pthread_self(), sizeof(cpu_set_t), &group_affinity);
-    }
-    else {
+   {
         CPU_ZERO(&group_affinity);
 
         if (num_groups == 1) {
@@ -1676,8 +1670,7 @@ EB_API EbErrorType svt_av1_enc_init(EbComponentType *svt_enc_component)
     * Thread Handles
     ************************************/
     EbSvtAv1EncConfiguration   *config_ptr = &enc_handle_ptr->scs_instance_array[0]->scs_ptr->static_config;
-    config_ptr->unpin = (config_ptr->logical_processors == 1) ? 1 : config_ptr->unpin;
-    if ((config_ptr->logical_processors == 1) || (config_ptr->unpin == 0))
+    if (config_ptr->unpin == 0)
     eb_set_thread_management_parameters(config_ptr);
 
     control_set_ptr = enc_handle_ptr->scs_instance_array[0]->scs_ptr;
@@ -2257,6 +2250,10 @@ void copy_api_from_app(
     scs_ptr->static_config.logical_processors = ((EbSvtAv1EncConfiguration*)config_struct)->logical_processors;
     scs_ptr->static_config.unpin = ((EbSvtAv1EncConfiguration*)config_struct)->unpin;
     scs_ptr->static_config.target_socket = ((EbSvtAv1EncConfiguration*)config_struct)->target_socket;
+    if ((scs_ptr->static_config.unpin == 1) && (scs_ptr->static_config.target_socket != -1)){
+        SVT_WARN("unpin 1 and ss %d is not a valid combination: unpin will be set to 0\n", scs_ptr->static_config.target_socket);
+        scs_ptr->static_config.unpin = 0;
+    }
     scs_ptr->static_config.qp = ((EbSvtAv1EncConfiguration*)config_struct)->qp;
     scs_ptr->static_config.recon_enabled = ((EbSvtAv1EncConfiguration*)config_struct)->recon_enabled;
 

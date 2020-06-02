@@ -799,10 +799,17 @@ ConfigEntry config_entry_global_options[] = {
     {SINGLE_INPUT, THREAD_MGMNT, "number of logical processors to be used", set_logical_processors},
     {SINGLE_INPUT,
      UNPIN_TOKEN,
-     "allows the execution of multiple encodes on the CPU without having to pin them to a "
-     "specific mask( 0: OFF ,1: ON) ",
+    "Allows the execution to be pined/unpined to/from a specific number of cores \n"
+    "The combinational use of --unpin with --l results in memory reduction while allowing the execution to work on any of the cores and not restrict it to specific cores \n"
+    "--unpin is overwritten to 0 when --ss is set to 0 or 1. ( 0: OFF [default] ,1: ON) \n"
+    "Example: 72 core machine: \n"
+    "72 cores x - lp 1 - unpin 1 \n"
+    "36 cores x - lp 2 - unpin 1 \n"
+    "18 cores x - lp 4 - unpin 1 ",
      set_unpin_execution},
-    {SINGLE_INPUT, TARGET_SOCKET, "Specify  which socket the encoder runs on", set_target_socket},
+    {SINGLE_INPUT, TARGET_SOCKET, "Specify  which socket the encoder runs on"
+    "--unpin is overwritten to 0 when --ss is set to 0 or 1", 
+    set_target_socket},
     // Termination
     {SINGLE_INPUT, NULL, NULL, NULL}};
 

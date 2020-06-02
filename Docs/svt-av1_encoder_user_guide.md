@@ -280,6 +280,20 @@ If only TargetSocket is set, threads run on all the logical processors of socket
 
 If both LogicalProcessorNumber and TargetSocket are set, threads run on 20 logical processors of socket 0. Threads guaranteed to run only on socket 0 if 20 is larger than logical processor number of socket 0.
 
+The (`-unpin`) option allows the user to pin/unpin the execution to/from a specific number of cores.
+
+The combinational use of (`-unpin`)  with (`-lp`) results in memory reduction while allowing the execution to work on any of the cores and not restrict it to specific cores.
+
+This is an example on how to use them together.
+
+so -lp 4 with unpin 0 would restrict the encoder to work on cpu0-3 and reduce the resource allocation to only what's needed to using 4 cores. -lp 4 with -unpin 1, would reduce the allocation to what's needed for 4 cores but not restrict the encoder to run on cpu 0-3, in this case the encoder might end up using more than 4 cores due to the multi-threading nature of the encoder, but would at least allow for more multiple -lp4 encodes to run on the same machine without them being all restricted to run on cpu 0-3 or overflow the memory usage.
+
+Example: 72 core machine:
+72 cores x -lp 1 -unpin 1
+36 cores x -lp 2 -unpin 1
+18 cores x -lp 4 -unpin 1
+
+(`-ss`) and (`-unpin 1`) is not a valid combination.(`-unpin `) is overwritten to 0 when (`-ss`) is used.
 ## Legal Disclaimer
 
 ### Optimization Notice
